@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <mutex>
 
 #include <curl/curl.h>
 
@@ -15,7 +16,11 @@
 #endif // _stat
 #endif // _WIN32
 
-extern bool print_debug_info;
+extern bool print_debug_info, serve_cache_on_fetch_fail;
+extern int global_log_level;
+
+typedef std::lock_guard<std::mutex> guarded_mutex;
+std::mutex cache_rw_lock;
 
 //std::string user_agent_str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36";
 std::string user_agent_str = "subconverter/" + std::string(VERSION) + " cURL/" + std::string(LIBCURL_VERSION);
@@ -43,7 +48,7 @@ static int writer(char *data, size_t size, size_t nmemb, std::string *writerData
 static inline void curl_set_common_options(CURL *curl_handle, const char *url)
 {
     curl_easy_setopt(curl_handle, CURLOPT_URL, url);
-    curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, print_debug_info ? 1L : 0L);
+    curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, global_log_level == LOG_LEVEL_VERBOSE ? 1L : 0L);
     curl_easy_setopt(curl_handle, CURLOPT_NOPROGRESS, 1L);
     curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
     curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L);
@@ -124,6 +129,7 @@ std::string webGet(std::string url, std::string proxy, std::string &response_hea
             if(difftime(now, mtime) <= cache_ttl) // within TTL
             {
                 writeLog(0, "CACHE HIT: '" + url + "', using local cache.");
+                guarded_mutex guard(cache_rw_lock);
                 response_headers = fileGet(path_header, true);
                 return fileGet(path, true);
             }
@@ -134,19 +140,21 @@ std::string webGet(std::string url, std::string proxy, std::string &response_hea
         content = curlGet(url, proxy, response_headers, return_code); // try to fetch data
         if(return_code == CURLE_OK) // success, save new cache
         {
+            guarded_mutex guard(cache_rw_lock);
             fileWrite(path, content, true);
             fileWrite(path_header, response_headers, true);
         }
         else
         {
-            if(fileExist(path)) // failed, check if cache exist
+            if(fileExist(path) && serve_cache_on_fetch_fail) // failed, check if cache exist
             {
                 writeLog(0, "Fetch failed. Serving cached content."); // cache exist, serving cache
+                guarded_mutex guard(cache_rw_lock);
                 content = fileGet(path, true);
                 response_headers = fileGet(path_header, true);
             }
             else
-                writeLog(0, "Fetch failed. No local cache available."); // cache not exist, serving nothing
+                writeLog(0, "Fetch failed. No local cache available."); // cache not exist or not allow to serve cache, serving nothing
         }
         return content;
     }
@@ -157,6 +165,12 @@ std::string webGet(std::string url, std::string proxy)
 {
     std::string dummy;
     return webGet(url, proxy, dummy);
+}
+
+std::string webGet(std::string url, std::string proxy, unsigned int cache_ttl)
+{
+    std::string dummy;
+    return webGet(url, proxy, dummy, cache_ttl);
 }
 
 int curlPost(std::string url, std::string data, std::string proxy, std::string auth_token, std::string *retData)
@@ -196,6 +210,11 @@ int curlPost(std::string url, std::string data, std::string proxy, std::string a
     return retVal;
 }
 
+int webPost(std::string url, std::string data, std::string proxy, std::string auth_token, std::string *retData)
+{
+    return curlPost(url, data, proxy, auth_token, retData);
+}
+
 int curlPatch(std::string url, std::string data, std::string proxy, std::string auth_token, std::string *retData)
 {
     CURL *curl_handle;
@@ -232,4 +251,9 @@ int curlPatch(std::string url, std::string data, std::string proxy, std::string 
     curl_easy_cleanup(curl_handle);
 
     return retVal;
+}
+
+int webPatch(std::string url, std::string data, std::string proxy, std::string auth_token, std::string *retData)
+{
+    return curlPatch(url, data, proxy, auth_token, retData);
 }

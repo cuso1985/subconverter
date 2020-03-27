@@ -7,6 +7,24 @@ DOMAIN-SUFFIX,line-cdn.net
 DOMAIN-SUFFIX,line-scdn.net
 DOMAIN-SUFFIX,nhncorp.jp
 
+# > Microsoft
+USER-AGENT,OneDrive*
+DOMAIN-KEYWORD,microsoft
+DOMAIN-KEYWORD,onedrive
+DOMAIN-SUFFIX,azure.com
+DOMAIN-SUFFIX,live.com
+DOMAIN-SUFFIX,live.net
+DOMAIN-SUFFIX,office.com
+DOMAIN-SUFFIX,office.net
+DOMAIN-SUFFIX,skype.com
+
+# > Sony
+DOMAIN-SUFFIX,playstation.com
+DOMAIN-SUFFIX,playstation.net
+DOMAIN-SUFFIX,playstationnetwork.com
+DOMAIN-SUFFIX,sony.com
+DOMAIN-SUFFIX,sonyentertainmentnetwork.com
+
 # > Spark
 DOMAIN-SUFFIX,api.amplitude.com
 DOMAIN-SUFFIX,app.smartmailcloud.com
@@ -32,6 +50,8 @@ DOMAIN-SUFFIX,akamaihd.net
 DOMAIN-SUFFIX,airtable.com
 DOMAIN-SUFFIX,alfredapp.com
 DOMAIN-SUFFIX,allconnected.co
+DOMAIN-SUFFIX,amazon.co
+DOMAIN-SUFFIX,amazon.co.jp
 DOMAIN-SUFFIX,amazon.com
 DOMAIN-SUFFIX,amazonaws.com
 DOMAIN-SUFFIX,ampproject.com
@@ -185,7 +205,6 @@ DOMAIN-SUFFIX,fzlm.net
 DOMAIN-SUFFIX,g.co
 DOMAIN-SUFFIX,gabia.net
 DOMAIN-SUFFIX,garena.com
-DOMAIN-SUFFIX,gameloft.com
 DOMAIN-SUFFIX,geni.us
 DOMAIN-SUFFIX,get.how
 DOMAIN-SUFFIX,getcloudapp.com
@@ -222,6 +241,7 @@ DOMAIN-SUFFIX,hockeyapp.net
 DOMAIN-SUFFIX,homedepot.com
 DOMAIN-SUFFIX,hootsuite.com
 DOMAIN-SUFFIX,howtoforge.com
+DOMAIN-SUFFIX,i-cable.com
 DOMAIN-SUFFIX,iam.soy
 DOMAIN-SUFFIX,icoco.com
 DOMAIN-SUFFIX,icons8.com
@@ -315,7 +335,6 @@ DOMAIN-SUFFIX,nytimg.com
 DOMAIN-SUFFIX,nytstyle.com
 DOMAIN-SUFFIX,office365.com
 DOMAIN-SUFFIX,omnigroup.com
-DOMAIN-SUFFIX,onedrive.com
 DOMAIN-SUFFIX,onenote.com
 DOMAIN-SUFFIX,ooyala.com
 DOMAIN-SUFFIX,openvpn.net
@@ -348,6 +367,7 @@ DOMAIN-SUFFIX,polymer-project.org
 DOMAIN-SUFFIX,popo.tw
 DOMAIN-SUFFIX,potato.im
 DOMAIN-SUFFIX,redd.it
+DOMAIN-SUFFIX,rthk.hk
 DOMAIN-SUFFIX,prfct.co
 DOMAIN-SUFFIX,proxfree.com
 DOMAIN-SUFFIX,psiphon3.com
@@ -555,6 +575,7 @@ DOMAIN-SUFFIX,wikipedia.org
 DOMAIN-SUFFIX,wn.com
 DOMAIN-SUFFIX,wordpress.com
 DOMAIN-SUFFIX,workflow.is
+DOMAIN-SUFFIX,workflowy.com
 DOMAIN-SUFFIX,worldcat.org
 DOMAIN-SUFFIX,wow.com
 DOMAIN-SUFFIX,wp.com
@@ -566,6 +587,7 @@ DOMAIN-SUFFIX,xclient.info
 DOMAIN-SUFFIX,xda-developers.com
 DOMAIN-SUFFIX,xeeno.com
 DOMAIN-SUFFIX,xiti.com
+DOMAIN-SUFFIX,xteko.com
 DOMAIN-SUFFIX,xuite.net
 DOMAIN-SUFFIX,xvideos.com
 DOMAIN-SUFFIX,yahoo.com
@@ -599,7 +621,6 @@ DOMAIN-KEYWORD,dropbox
 DOMAIN-KEYWORD,facebook
 DOMAIN-KEYWORD,github
 DOMAIN-KEYWORD,instagram
-DOMAIN-KEYWORD,porn
 DOMAIN-KEYWORD,twitter
 DOMAIN-KEYWORD,whatsapp
 DOMAIN-KEYWORD,google

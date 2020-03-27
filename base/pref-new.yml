@@ -12,6 +12,7 @@ common:
   quan_rule_base: base/quan.conf
   quanx_rule_base: base/quanx.conf
   loon_rule_base: base/loon.conf
+  sssub_rule_base: base/shadowsocks_base.json
   proxy_config: SYSTEM
   proxy_ruleset: SYSTEM
   proxy_subscription: NONE
@@ -19,13 +20,16 @@ common:
 
 userinfo:
   stream_rule: 
+  - {match: "^剩余流量：(.*?)\\|总流量：(.*)$", replace: "total=$2&left=$1"}
   - {match: "^剩余流量：(.*?) (.*)$", replace: "total=$1&left=$2"}
   - {match: "^Bandwidth: (.*?)/(.*)$", replace: "used=$1&total=$2"}
   - {match: "^.*剩余(.*?)(?:\\s*?)@(?:.*)$", replace: "total=$1"}
+  - {match: "^.*?流量:(.*?) 剩:(?:.*)$", replace: "total=$1"}
   time_rule:
   - {match: "^过期时间：(\\d+)-(\\d+)-(\\d+) (\\d+):(\\d+):(\\d+)$", replace: "$1:$2:$3:$4:$5:$6"}
-  - {match: "^到期时间:(\\d+)-(\\d+)-(\\d+)$", replace: "$1:$2:$3:0:0:0"}
+  - {match: "^到期时间(:|：)(\\d+)-(\\d+)-(\\d+)$", replace: "$1:$2:$3:0:0:0"}
   - {match: "^Smart Access expire: (\\d+)/(\\d+)/(\\d+)$", replace: "$1:$2:$3:0:0:0"}
+  - {match: "^.*?流量:(?:.*?) 剩:(.*?)天$", replace: "left=$1d"}
 
 node_pref:
   udp_flag: false
@@ -33,6 +37,8 @@ node_pref:
   sort_flag: false
   skip_cert_verify_flag: false
   filter_deprecated_nodes: false
+  append_sub_userinfo: true
+  clash_use_new_field_name: false
   rename_node:
 #  - {match: "\\(?((x|X)?(\\d+)(\\.?\\d+)?)((\\s?倍率?)|(x|X))\\)?", replace: "$1x"}
   - {import: snippets/rename_node.txt}
@@ -78,6 +84,7 @@ server:
   port: 25500
 
 advanced:
+  log_level: info
   print_debug_info: false
   max_pending_connections: 10240
   max_concurrent_threads: 2
@@ -86,3 +93,4 @@ advanced:
   cache_subscription: 60
   cache_config: 300
   cache_ruleset: 21600
+  async_fetch_ruleset: false
